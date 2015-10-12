@@ -14,6 +14,14 @@
 #include "config.h"
 #include "interrupt.h"
 
+#define pin1 LATBbits.LATB4
+#define pin2 PORTDbits.RD6
+#define pin3 LATBbits.LATB2
+#define pin4 PORTDbits.RD12
+#define pin5 LATBbits.LATB0
+#define pin6 PORTFbits.RF1
+#define pin7 PORTGbits.RG0
+
 typedef enum stateTypeEnum {
     Wait, Scan, Print
 } stateType;
@@ -41,18 +49,18 @@ int main(void) {
 
             case Print:
                 delayUs(5);
-                if(key == 0) printCharLCD("0");
-                else if(key == 1) printCharLCD("1");
-                else if(key == 2) printCharLCD("2");
-                else if(key == 3) printCharLCD("3");
-                else if(key == 4) printCharLCD("4");
-                else if(key == 5) printCharLCD("5");
-                else if(key == 6) printCharLCD("6");
-                else if(key == 7) printCharLCD("7");
-                else if(key == 8) printCharLCD("8");
-                else if(key == 9) printCharLCD("9");
-                else if(key == 10) printCharLCD("*");
-                else if(key == 11) printCharLCD("#");
+                if(key == 0) printCharLCD('0');
+                else if(key == 1) printCharLCD('1');
+                else if(key == 2) printCharLCD('2');
+                else if(key == 3) printCharLCD('3');
+                else if(key == 4) printCharLCD('4');
+                else if(key == 5) printCharLCD('5');
+                else if(key == 6) printCharLCD('6');
+                else if(key == 7) printCharLCD('7');
+                else if(key == 8) printCharLCD('8');
+                else if(key == 9) printCharLCD('9');
+                else if(key == 10) printCharLCD('*');
+                else if(key == 11) printCharLCD('#');
                 state = Wait;
                 break;
 
@@ -63,7 +71,14 @@ int main(void) {
 }
 
 void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void) {
+    int domy1 = pin2;
+    int domy2 = pin4;
+    int domy3 = pin6;
+    int domy4 = pin7;
     IFS1bits.CNBIF = 0;
+    IFS1bits.CNGIF = 0;
+    IFS1bits.CNDIF = 0;
+    IFS1bits.CNGIF = 0;
     if(state == Wait){
         state = Scan;
     }
