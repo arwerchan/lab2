@@ -49,11 +49,9 @@ int main(void) {
     while (1) {
         switch (state) {
             case Wait:
-//                delayUs(100);
                 break;
 
             case Scan:
-                
                 key = scanKeypad();
                 state = MoveCursor;
                 break;
@@ -92,7 +90,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void) {
     int dummy2 = pin4;
     int dummy3 = pin6;
     int dummy4 = pin7;
-    IFS1bits.CNBIF = 0;
+    IFS1bits.CNFIF = 0;
     IFS1bits.CNDIF = 0;
     IFS1bits.CNGIF = 0;
     if(state == Wait && (pin2==press||pin4==press||pin6==press||pin7==press)){

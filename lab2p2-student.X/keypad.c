@@ -6,11 +6,11 @@
 #define output 0
 #define pin1 LATBbits.LATB4
 #define pin2 PORTDbits.RD6
-#define pin3 LATBbits.LATB2
+#define pin3 LATBbits.LATB2 
 #define pin4 PORTDbits.RD12
 #define pin5 LATBbits.LATB0
 #define pin6 PORTFbits.RF1
-#define pin7 PORTGbits.RG0
+#define pin7 PORTGbits.RG0  
 #define press 0
 #define release 1
 #define scanning 1
@@ -20,16 +20,12 @@
  * resistors. Don't forget about other considerations...
  */
 void initKeypad(void){
-//    ODCDbits.ODCD6 = 1;//enable ODC mode
-//    ODCDbits.ODCD12 = 1;
-//    ODCFbits.ODCF1 = 1;
-//    ODCGbits.ODCG0 = 1;
     ODCBbits.ODCB0 = 1;
     ODCBbits.ODCB2 = 1;
     ODCBbits.ODCB4 = 1;
-    ANSELBbits.ANSB11 = 0; //set to digital
-    ANSELBbits.ANSB13 = 0; //set pin3 to digital
-    ANSELBbits.ANSB14 = 0;
+    ANSELBbits.ANSB0 = 0;
+    ANSELBbits.ANSB2 = 0;
+    ANSELBbits.ANSB4 = 0;
     TRISDbits.TRISD6 = input;
     TRISDbits.TRISD12 = input;
     TRISFbits.TRISF1 = input;
@@ -53,34 +49,39 @@ void initKeypad(void){
  * no key is pressed at all. Otherwise, it should return the ASCII character of
  * the key that is pressed.
  */
-char scanKeypad(void){
-    char key = -1;
-
+int scanKeypad(void){
+    
+    int key = -1;
+    
     pin1 = scanning;
     pin3 = notscan;
     pin5 = notscan;
-    if(pin2 == press) key = 2;
-    if(pin4 == press) key = 0;
-    if(pin6 == press) key = 8;
-    if(pin7 == press) key = 5;
-    delayUs(100);
-    
+    if(pin2 == press) key = 1;
+    if(pin4 == press) key = 10; //10 for *
+    if(pin6 == press) key = 7;
+    if(pin7 == press) key = 4;
+    delayUs(500);
+
+    if (key == -1){
     pin1 = notscan;
     pin3 = scanning;
     pin5 = notscan;
-    if(pin2 == press) key = 1;
-    if(pin4 == press) key = 10;//10 for *
-    if(pin6 == press) key = 7;
-    if(pin7 == press) key = 4;
-    delayUs(100);
+    if(pin2 == press) key = 2;
+    if(pin4 == press) key = 0; 
+    if(pin6 == press) key = 8;
+    if(pin7 == press) key = 5;
+    delayUs(500);
+    }
     
+    if (key == -1){
     pin1 = notscan;
     pin3 = notscan;
     pin5 = scanning;
     if(pin2 == press) key = 3;
-    if(pin4 == press) key = 11;//11 for #
+    if(pin4 == press) key = 11; //11 for #
     if(pin6 == press) key = 9;
     if(pin7 == press) key = 6;
+    }
     
     return key;
 }
@@ -102,4 +103,25 @@ void enableEnterruptKeypad(){
     IEC1bits.CNGIE = 1;//enable allover interrupt
     IFS1bits.CNGIF = 0;//put flag down
     IPC8bits.CNIP = 7;
+}
+
+void disableKeyInterrupt(){
+    
+    CNCONDbits.ON = 0;//ENABLE INTERRUPT
+    CNENDbits.CNIED6 = 0;//enable interrupt of pin2
+    CNENDbits.CNIED12 = 0;//enable interrupt of pin4
+    IEC1bits.CNDIE = 0;//enable allover interrupt    
+    IFS1bits.CNDIF = 0;//put flag down
+    
+    CNCONFbits.ON = 0;//ENABLE INTERRUPT
+    CNENFbits.CNIEF1 = 0;//enable interrupt of pin6
+    IEC1bits.CNFIE = 0;//enable allover interrupt
+    IFS1bits.CNFIF = 0;//put flag down
+    
+    CNCONGbits.ON = 0;//ENABLE INTERRUPT
+    CNENGbits.CNIEG0 = 0;//disable interrupt of pin7
+    IEC1bits.CNGIE = 0;//enable allover interrupt
+    IFS1bits.CNGIF = 0;//put flag down
+    IPC8bits.CNIP = 7;
+    
 }

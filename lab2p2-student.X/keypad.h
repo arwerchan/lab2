@@ -10,8 +10,9 @@
 
 
 void initKeypad(void);
-char scanKeypad(void);
+int scanKeypad(void);
 void enableEnterruptKeypad();
+void disableKeyInterrupt();
 
 #endif	/* KEYPAD_H */
 
