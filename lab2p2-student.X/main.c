@@ -14,6 +14,8 @@
 #include "config.h"
 #include "interrupt.h"
 
+#define input 1
+#define output 0
 #define pin1 LATBbits.LATB4
 #define pin2 PORTDbits.RD6
 #define pin3 LATBbits.LATB2
@@ -21,34 +23,49 @@
 #define pin5 LATBbits.LATB0
 #define pin6 PORTFbits.RF1
 #define pin7 PORTGbits.RG0
+#define press 0
+#define release 1
+#define scanning 1
+#define notscan 0
 
 typedef enum stateTypeEnum {
-    Wait, Scan, Print
+    Wait, Scan, Print, MoveCursor
 } stateType;
 volatile stateType state;
 volatile int key = -1;
+volatile int count = 0;
 
 int main(void) {
+    
+    SYSTEMConfigPerformance(40000000);
     initKeypad();
+    enableEnterruptKeypad();
     initTimer2();
     initLCD();
     enableInterrupts();
+    moveCursorLCD(0,0);
     state = Wait;
 
     while (1) {
         switch (state) {
             case Wait:
-                delayUs(5);
+//                delayUs(100);
                 break;
 
             case Scan:
-                delayUs(5);
+                
                 key = scanKeypad();
+                state = MoveCursor;
+                break;
+                
+            case MoveCursor:
+                if(count == 0) moveCursorLCD(0,0);
+                else if (count == 9) moveCursorLCD(1,0);
                 state = Print;
                 break;
 
             case Print:
-                delayUs(5);
+                delayUs(100);
                 if(key == 0) printCharLCD('0');
                 else if(key == 1) printCharLCD('1');
                 else if(key == 2) printCharLCD('2');
@@ -76,10 +93,11 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void) {
     int dummy3 = pin6;
     int dummy4 = pin7;
     IFS1bits.CNBIF = 0;
-    IFS1bits.CNGIF = 0;
     IFS1bits.CNDIF = 0;
     IFS1bits.CNGIF = 0;
-    if(state == Wait){
+    if(state == Wait && (pin2==press||pin4==press||pin6==press||pin7==press)){
         state = Scan;
+        count ++;
+        if(count == 17) count = 0;
     }
 }
