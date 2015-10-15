@@ -53,7 +53,7 @@ void initKeypad(void) {
 int scanKeypad(void) {
 
     disableInterrupts();
-    
+
     pin1 = notscan;
     pin3 = notscan;
     pin5 = notscan;
@@ -64,15 +64,15 @@ int scanKeypad(void) {
     pin3 = notscan;
     pin5 = notscan;
     delayUs(500);
-    if (pin1 = scanning) {
+    if (pin1 == scanning) {
         if (pin2 == press) {
-            key = 1;
+            key = 2;
         } else if (pin4 == press) {
-            key = 10; // for *
+            key = 0; // for *
         } else if (pin6 == press) {
-            key = 7;
+            key = 8;
         } else if (pin7 == press) {
-            key = 4;
+            key = 5;
         }
     }
 
@@ -82,16 +82,13 @@ int scanKeypad(void) {
     delayUs(500);
     if (pin3 == scanning) {
         if (pin2 == press) {
-            key = 2;
-        }
-        else if (pin4 == press) {
-            key = 0;
-        }
-        else if (pin6 == press) {
-            key = 8;
-        }
-        else if (pin7 == press) {
-            key = 5;
+            key = 1;
+        } else if (pin4 == press) {
+            key = 10; // 10 for '*'
+        } else if (pin6 == press) {
+            key = 7;
+        } else if (pin7 == press) {
+            key = 4;
         }
 
     }
@@ -103,18 +100,19 @@ int scanKeypad(void) {
     if (pin5 == scanning) {
         if (pin2 == press) {
             key = 3;
-        }
-        else if (pin4 == press) {
+        } else if (pin4 == press) {
             key = 11;
+        } else if (pin6 == press) {
+            key = 9;
+        } else if (pin7 == press) {
+            key = 6;
         }
-        else if (pin6 == press) key = 9;
-        else if (pin7 == press) key = 6;
     }
-    
+
     pin1 = scanning;
     pin3 = scanning;
     pin5 = scanning;
-    
+
     enableInterrupts();
     return key;
 }
