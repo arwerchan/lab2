@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=lab2p2-student.X
+PROJECTNAME=keypad.X
 
 # Active Configuration
 DEFAULTCONF=default

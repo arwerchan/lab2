@@ -27,8 +27,8 @@ void initKeypad(void){
     ODCBbits.ODCB0 = 1;
     ODCBbits.ODCB2 = 1;
     ODCBbits.ODCB4 = 1;
-    ANSELBbits.ANSB11 = 0;//set to digital
-    ANSELBbits.ANSB13 = 0;//set pin3 to digital
+    ANSELBbits.ANSB11 = 0; //set to digital
+    ANSELBbits.ANSB13 = 0; //set pin3 to digital
     ANSELBbits.ANSB14 = 0;
     TRISDbits.TRISD6 = input;
     TRISDbits.TRISD12 = input;
@@ -37,6 +37,7 @@ void initKeypad(void){
     TRISBbits.TRISB0 = output;
     TRISBbits.TRISB2 = output;
     TRISBbits.TRISB4 = output;
+    
     pin1 = notscan;
     pin3 = notscan;
     pin5 = notscan;

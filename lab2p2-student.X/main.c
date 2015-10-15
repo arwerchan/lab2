@@ -71,10 +71,10 @@ int main(void) {
 }
 
 void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void) {
-    int domy1 = pin2;
-    int domy2 = pin4;
-    int domy3 = pin6;
-    int domy4 = pin7;
+    int dummy1 = pin2;
+    int dummy2 = pin4;
+    int dummy3 = pin6;
+    int dummy4 = pin7;
     IFS1bits.CNBIF = 0;
     IFS1bits.CNGIF = 0;
     IFS1bits.CNDIF = 0;
