@@ -11,6 +11,7 @@
 
 void initKeypad(void);
 char scanKeypad(void);
+void enableEnterruptKeypad();
 
 #endif	/* KEYPAD_H */
 

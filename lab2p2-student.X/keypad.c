@@ -54,38 +54,7 @@ void initKeypad(void){
  */
 char scanKeypad(void){
     char key = -1;
-    
-//    pin2 = scanning;
-//    pin4 = notscan;
-//    pin6 = notscan;
-//    pin7 = notscan;
-//    if(pin1 == press) key = 2;
-//    if(pin3 == press) key = 1;
-//    if(pin5 == press) key = 3;
-//    
-//    pin2 = notscan;
-//    pin4 = scanning;
-//    pin6 = notscan;
-//    pin7 = notscan;
-//    if(pin1 == press) key = 0;
-//    if(pin3 == press) key = 10;//10 is "*"
-//    if(pin5 == press) key = 11;//11 is "#"
-//    
-//    pin2 = notscan;
-//    pin4 = notscan;
-//    pin6 = scanning;
-//    pin7 = notscan;
-//    if(pin1 == press) key = 8;
-//    if(pin3 == press) key = 7;
-//    if(pin5 == press) key = 9;
-//    
-//    pin2 = notscan;
-//    pin4 = notscan;
-//    pin6 = notscan;
-//    pin7 = scanning;
-//    if(pin1 == press) key = 5;
-//    if(pin3 == press) key = 4;
-//    if(pin5 == press) key = 6;
+
     pin1 = scanning;
     pin3 = notscan;
     pin5 = notscan;
@@ -93,6 +62,7 @@ char scanKeypad(void){
     if(pin4 == press) key = 0;
     if(pin6 == press) key = 8;
     if(pin7 == press) key = 5;
+    delayUs(100);
     
     pin1 = notscan;
     pin3 = scanning;
@@ -101,6 +71,7 @@ char scanKeypad(void){
     if(pin4 == press) key = 10;//10 for *
     if(pin6 == press) key = 7;
     if(pin7 == press) key = 4;
+    delayUs(100);
     
     pin1 = notscan;
     pin3 = notscan;
@@ -111,4 +82,23 @@ char scanKeypad(void){
     if(pin7 == press) key = 6;
     
     return key;
+}
+
+void enableEnterruptKeypad(){
+    CNCONDbits.ON = 1;//ENABLE INTERRUPT
+    CNENDbits.CNIED6 = 1;//enable interrupt of pin2
+    CNENDbits.CNIED12 = 1;//enable interrupt of pin4
+    IEC1bits.CNDIE = 1;//enable allover interrupt    
+    IFS1bits.CNDIF = 0;//put flag down
+    
+    CNCONFbits.ON = 1;//ENABLE INTERRUPT
+    CNENFbits.CNIEF1 = 1;//enable interrupt of pin6
+    IEC1bits.CNFIE = 1;//enable allover interrupt
+    IFS1bits.CNFIF = 0;//put flag down
+    
+    CNCONGbits.ON = 1;//ENABLE INTERRUPT
+    CNENGbits.CNIEG0 = 1;//enable interrupt of pin7
+    IEC1bits.CNGIE = 1;//enable allover interrupt
+    IFS1bits.CNGIF = 0;//put flag down
+    IPC8bits.CNIP = 7;
 }
