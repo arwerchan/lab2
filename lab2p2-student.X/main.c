@@ -104,10 +104,12 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void) {
     IFS1bits.CNFIF = 0;
     IFS1bits.CNDIF = 0;
     IFS1bits.CNGIF = 0;
-    if (state == Wait) state = debounce1;
-    else if (state == Scan) state = debounce2;
+    
     if(state == Wait && (pin2==press||pin4==press||pin6==press||pin7==press)){
         count ++;
         if(count == 17) count = 0;
     }
+    
+    if (state == Wait) state = debounce1;
+    else if (state == Scan) state = debounce2;
 }
