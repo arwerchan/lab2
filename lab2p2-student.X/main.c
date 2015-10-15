@@ -29,7 +29,7 @@
 #define notscan 0
 
 typedef enum stateTypeEnum {
-    Wait, Scan, Print, MoveCursor
+    Wait, Scan, Print, MoveCursor, debounce1, debounce2
 } stateType;
 volatile stateType state;
 volatile int key = -1;
@@ -61,6 +61,16 @@ int main(void) {
                 else if (count == 9) moveCursorLCD(1,0);
                 state = Print;
                 break;
+                
+            case debounce1:
+                delayUs(500);
+                state = Scan;
+                break;
+                
+            case debounce2:
+                delayUs(500);
+                state = MoveCursor;
+                break;
 
             case Print:
                 delayUs(100);
@@ -86,15 +96,17 @@ int main(void) {
 }
 
 void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void) {
-    int dummy1 = pin2;
-    int dummy2 = pin4;
-    int dummy3 = pin6;
-    int dummy4 = pin7;
+    int dummy;
+    if (CNSTATDbits.CNSTATD6 == 1) dummy = pin2;
+    if (CNSTATDbits.CNSTATD12 == 1) dummy = pin4;
+    if (CNSTATFbits.CNSTATF1 == 1) dummy = pin6;
+    if (CNSTATGbits.CNSTATG0 == 1) dummy = pin7;
     IFS1bits.CNFIF = 0;
     IFS1bits.CNDIF = 0;
     IFS1bits.CNGIF = 0;
+    if (state == Wait) state = debounce1;
+    else if (state == Scan) state = debounce2;
     if(state == Wait && (pin2==press||pin4==press||pin6==press||pin7==press)){
-        state = Scan;
         count ++;
         if(count == 17) count = 0;
     }
