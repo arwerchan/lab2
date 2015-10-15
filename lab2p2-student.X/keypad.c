@@ -7,7 +7,7 @@
 #define output 0
 #define pin1 LATDbits.LATD3 //collumn
 #define pin2 PORTDbits.RD6 //row
-#define pin3 LATBbits.LATB2 //collumn
+#define pin3 LATDbits.LATD5 //collumn
 #define pin4 PORTDbits.RD12 //row
 #define pin5 LATBbits.LATB0 //collumn
 #define pin6 PORTFbits.RF1 // row
@@ -25,14 +25,14 @@ void initKeypad(void) {
     ODCBbits.ODCB2 = 1;
     ODCDbits.ODCD3 = 1;
     ANSELBbits.ANSB0 = 0;
-    ANSELBbits.ANSB2 = 0;
+    //ANSELBbits.ANSB2 = 0;
     //ANSELBbits.ANSB4 = 0;
     TRISDbits.TRISD6 = input;
     TRISDbits.TRISD12 = input;
     TRISFbits.TRISF1 = input;
     TRISGbits.TRISG0 = input;
     TRISBbits.TRISB0 = output;
-    TRISBbits.TRISB2 = output;
+    TRISDbits.TRISD5 = output;
     TRISDbits.TRISD3 = output;
 
     pin1 = scanning;
