@@ -108,6 +108,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void) {
     if(state == Wait && (pin2==press||pin4==press||pin6==press||pin7==press)){
         count ++;
         if(count == 18) count = 0;
+        
     }
     
     if (state == Wait) state = debounce1;
