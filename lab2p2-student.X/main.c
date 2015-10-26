@@ -49,7 +49,6 @@ int main(void) {
     while (1) {
         switch (state) {
             case Wait:
-//                delayUs(100);
                 break;
 
             case Scan:
@@ -92,7 +91,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void) {
     int domy2 = pin4;
     int domy3 = pin6;
     int domy4 = pin7;
-    IFS1bits.CNBIF = 0;
+    IFS1bits.CNFIF = 0;
     IFS1bits.CNDIF = 0;
     IFS1bits.CNGIF = 0;
     if(state == Wait && (pin2==press||pin4==press||pin6==press||pin7==press)){
@@ -100,4 +99,7 @@ void __ISR(_CHANGE_NOTICE_VECTOR, IPL7SRS) _CNInterrupt(void) {
         count ++;
         if(count == 17) count = 0;
     }
+//    else if(pin2==release||pin4==release||pin6==release||pin7==release){
+//        state = Wait;
+//    }
 }
